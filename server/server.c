@@ -33,7 +33,8 @@ node* emailListHead = NULL;
 /**
  * Prototypes
  */
-int sendEmail(char *body);
+int sendEmail(char *body, char* to);
+int sendAllEmails(char* body);
 
 /** Starts listening for client requests. */
 int start_server(int PORT_NUMBER) {
@@ -111,13 +112,15 @@ int start_server(int PORT_NUMBER) {
           printf("Sound level is: %lf\n", d);
           strcpy(reply, "SUPER SECURE ALARM SYSTEM ALERT: sound level has reached ");
           strcat(reply, soundbuff);
-          sendEmail(reply);
+          sendAllEmails(reply);
     	}
 		
 		if (strncmp("GET /email/", request, 11) == 0) {
 			printf("request: %s\n", request);
 			
-			int length = strlen(&request[11]);
+			char* pch = strtok(&request[11], " ");
+			
+			int length = strlen(pch);			
 			char* email = malloc(length + 1);
 			memcpy(email, &request[11], length);
 			email[length] = '\0';
@@ -129,8 +132,6 @@ int start_server(int PORT_NUMBER) {
 			printList(emailListHead);
 			
 		}
-
-  
   
       // 6. send: send the message over the socket
       // note that the second argument is a char*, and the third is the number of chars
@@ -169,19 +170,19 @@ int main(int argc, char *argv[])
   return 0;
 }
 
-int sendEmail(char *body) {
+int sendAllEmails(char* body) {
+	node* current = emailListHead;
+	while(current != NULL) {
+		sendEmail(body, current->string);
+		current = current->next;
+	}
+	
+	return 0;
+}
+
+int sendEmail(char* body, char* to) {
 	printf("trying to send e-mail\n");
         char cmd[5000];  // to hold the command.
-        char to[] = "mark.mercurio@gmail.com"; // email id of the recepient.    
-		// email body.
-        //char tempFile[100];     // name of tempfile.
-
-        //strcpy(tempFile,tempnam("/tmp","sendmail")); // generate temp file name.
-
-        //FILE *fp = fopen(tempFile,"w"); // open it for writing.
-        //fprintf(fp,"%s\n",body);        // write body to it.
-        //fclose(fp);             // close it.
-
 		
         sprintf(cmd,"echo \"%s\" | /usr/bin/mailx -s 'Security Alert' %s", body, to); // prepare command.
         
