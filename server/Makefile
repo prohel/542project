@@ -1,5 +1,5 @@
 server:
-	gcc server.c -o server
+	gcc LinkedList.c server.c -o server
 
 run: server
 	./server 3000
