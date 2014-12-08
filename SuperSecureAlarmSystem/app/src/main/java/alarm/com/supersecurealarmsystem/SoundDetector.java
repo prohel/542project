@@ -8,22 +8,30 @@ import android.widget.TextView;
 public class SoundDetector extends Activity {
     private SoundMeter mRecorder = null;
     private TextView tv = null;
-    protected static final String SERVER = "158.130.110.209";
+    protected static final String SERVER = "158.130.106.198";
     protected static final String PORT = "3000";
     private int count = 0;
+
+    boolean keepRunning;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sound_detector);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         tv = (TextView)findViewById(R.id.tv);
         mRecorder = new SoundMeter();
+        keepRunning = true;
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                    setUIText(tv, "started thread");
-                while (true) {
+                setUIText(tv, "started thread");
+                while (keepRunning) {
                     if (mRecorder != null && mRecorder.isOn()) {
                         double amplitude = mRecorder.getAmplitude();
                         setUIText(tv, String.valueOf(amplitude));
@@ -40,6 +48,12 @@ public class SoundDetector extends Activity {
         });
         mRecorder.start();
         thread.start();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        keepRunning = false;
     }
 
     private void sendMessage(String type, String value) {

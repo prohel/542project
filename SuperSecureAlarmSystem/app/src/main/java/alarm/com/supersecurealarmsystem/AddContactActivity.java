@@ -3,6 +3,7 @@ package alarm.com.supersecurealarmsystem;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -18,6 +19,9 @@ public class AddContactActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_contact);
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         phoneNumber = (EditText) findViewById(R.id.phone_input);
         emailAddress = (EditText) findViewById(R.id.email_input);
@@ -63,6 +67,7 @@ public class AddContactActivity extends Activity {
             newRequest.sendGet();
         } catch (Exception e) {
             Log.v("AddContactActivity", "error occurred");
+            e.printStackTrace();
         }
     }
 
