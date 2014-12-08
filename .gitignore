@@ -1,0 +1,11 @@
+# Ignore everything
+.idea/*
+SuperSecureAlarmSystem/.idea/*
+app/build/*/
+app/build/src/androidTest/*/
+build/*/
+gradle/*/
+.DS_Store
+SuperSecureAlarmSystem/app/app.iml
+SuperSecureAlarmSystem/app/src/main/res/menu/menu_add_contact.xml
+!.gitignore
