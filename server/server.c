@@ -1,3 +1,5 @@
+#include "LinkedList.h"
+
 #include <sys/types.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -25,6 +27,13 @@ int score = 0; // keeps track of score
 int fd;
 int fdard;
 pthread_mutex_t  lock;
+
+node* emailListHead = NULL;
+
+/**
+ * Prototypes
+ */
+int sendEmail(char *body);
 
 /** Starts listening for client requests. */
 int start_server(int PORT_NUMBER) {
@@ -104,6 +113,14 @@ int start_server(int PORT_NUMBER) {
           strcat(reply, soundbuff);
           sendEmail(reply);
     	}
+		
+		if (strncmp("GET /email/", request, 11) == 0) {
+			int length = strlen(&request[11]);
+			char* email = malloc(length + 1);
+			memcpy(email, &request[11], length);
+			email[length] = '\0';
+			addToList(&emailListHead, email);
+		}
 
   
   
