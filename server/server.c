@@ -115,11 +115,19 @@ int start_server(int PORT_NUMBER) {
     	}
 		
 		if (strncmp("GET /email/", request, 11) == 0) {
+			printf("request: %s\n", request);
+			
 			int length = strlen(&request[11]);
 			char* email = malloc(length + 1);
 			memcpy(email, &request[11], length);
 			email[length] = '\0';
+			
+			printf("email: %s\n", email);
+			
 			addToList(&emailListHead, email);
+			
+			printList(emailListHead);
+			
 		}
 
   
