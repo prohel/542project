@@ -3,6 +3,7 @@ package alarm.com.supersecurealarmsystem;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -57,7 +58,12 @@ public class AddContactActivity extends Activity {
             return;
         }
 
-        //Do something else
+        HttpRequest newRequest = new HttpRequest("email", email.toString());
+        try {
+            newRequest.sendGet();
+        } catch (Exception e) {
+            Log.v("AddContactActivity", "error occurred");
+        }
     }
 
     /**
