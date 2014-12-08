@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-
 public class AddContactActivity extends Activity {
 
     EditText phoneNumber;
@@ -61,8 +60,7 @@ public class AddContactActivity extends Activity {
             makeToast(responseMessage);
             return;
         }
-
-        HttpRequest newRequest = new HttpRequest("email", email.toString());
+        HttpRequest newRequest = new HttpRequest("email", email.toString().replaceAll("@","%40"));
         try {
             newRequest.sendGet();
         } catch (Exception e) {
