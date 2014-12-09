@@ -30,7 +30,7 @@ public class SoundDetector extends Activity {
         tv2 = (TextView) findViewById(R.id.tv2);
         mRecorder = new SoundMeter();
         keepRunning = true;
-        mAccelerometer = new Accelerometer();
+        mAccelerometer = new Accelerometer(getApplicationContext());
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {

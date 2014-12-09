@@ -19,7 +19,7 @@ public class Accelerometer {
     private float mAccelCurrent; // current acceleration including gravity
     private float mAccelLast; // last acceleration including gravity
 
-    public Accelerometer() {
+    public Accelerometer(Context mContext) {
         this.mContext = mContext;
     }
 
