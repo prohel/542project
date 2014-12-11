@@ -57,9 +57,12 @@ public class SoundDetector extends Activity {
     }
 
     @Override
+
     protected void onPause() {
         super.onPause();
         keepRunning = false;
+        mAccelerometer.stop();
+        mRecorder.stop();
     }
 
     private void sendMessage(String type, String value) {
