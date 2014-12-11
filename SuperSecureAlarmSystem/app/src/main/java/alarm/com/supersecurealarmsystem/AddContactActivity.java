@@ -60,7 +60,7 @@ public class AddContactActivity extends Activity {
             makeToast(responseMessage);
             return;
         }
-        HttpRequest newRequest = new HttpRequest("email", email.toString().replaceAll("@","%40"));
+        HttpRequest newRequest = new HttpRequest("email", email.toString());
         try {
             newRequest.sendGet();
         } catch (Exception e) {
