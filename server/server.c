@@ -29,6 +29,7 @@ int fdard;
 pthread_mutex_t  lock;
 
 node* emailListHead = NULL;
+node* phoneListHead = NULL;
 
 /**
  * Prototypes
@@ -132,6 +133,62 @@ int start_server(int PORT_NUMBER) {
 			printList(emailListHead);
 			
 		}
+		
+		
+		if (strncmp("GET /phone/", request, 11) == 0) {
+			printf("request: %s\n", request);
+			
+			char* pch = strtok(&request[11], " ");
+			
+			int length = strlen(pch);			
+			char* phone = malloc(length + 1);
+			memcpy(phone, &request[11], length);
+			phone[length] = '\0';
+			
+			printf("phone: %s\n", phone);
+			
+			addToList(&phoneListHead, phone);
+			
+			printList(phoneListHead);
+			
+		}
+		
+		if (strncmp("GET /remov/", request, 11) == 0) {
+			printf("request: %s\n", request);
+			
+			char* pch = strtok(&request[11], " ");
+			
+			int length = strlen(pch);			
+			char* email = malloc(length + 1);
+			memcpy(email, &request[11], length);
+			email[length] = '\0';
+			
+			printf("email: %s\n", email);
+			
+			emailListHead = removeNode(emailListHead, email);
+			printf("emailListHead %p\n", emailListHead);
+			printList(emailListHead);
+			
+		}
+		
+		if (strncmp("GET /remop/", request, 11) == 0) {
+			printf("request: %s\n", request);
+			
+			char* pch = strtok(&request[11], " ");
+			
+			int length = strlen(pch);			
+			char* phone = malloc(length + 1);
+			memcpy(phone, &request[11], length);
+			phone[length] = '\0';
+			
+			printf("phone: %s\n", phone);
+			
+			phoneListHead = removeNode(phoneListHead, phone);
+			printf("phoneListHead %p\n", phoneListHead);
+			printList(phoneListHead);
+			
+		}
+		
   
       // 6. send: send the message over the socket
       // note that the second argument is a char*, and the third is the number of chars
