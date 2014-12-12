@@ -11,5 +11,7 @@
     <string name="emailHint">myEmail@foo.com</string>
     <string name="submit">add</string>
     <string name="title_activity_home_page">HomePageActivity</string>
+    <string name="remove">remove</string>
+
 
 </resources>

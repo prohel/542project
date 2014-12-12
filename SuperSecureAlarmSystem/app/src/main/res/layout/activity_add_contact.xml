@@ -6,7 +6,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="alarm.com.supersecurealarmsystem.AddContactActivity">
+    tools:context="alarm.com.supersecurealarmsystem.AddContactActivity" android:background="#ff129793">
 
     <LinearLayout
             android:orientation="vertical"
@@ -29,6 +29,11 @@
                     android:hint="@string/emailHint"
                     android:id="@+id/email_input"
                     android:editable="true"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:layout_marginBottom="50dp">
             <Button
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
@@ -36,6 +41,13 @@
                     android:text="@string/submit"
                     android:id="@+id/email_button"
                     android:onClick="emailButtonListener"/>
+            <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="remove"
+                    android:id="@+id/_email"
+                    android:onClick="removeEmailButtonListener"/>
         </LinearLayout>
         <TextView
                 android:layout_width="wrap_content"
@@ -46,7 +58,7 @@
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_height="wrap_content">
             <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -54,13 +66,26 @@
                     android:ems="10"
                     android:hint="@string/phoneHint"
                     android:id="@+id/phone_input"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
             <Button
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/submit"
                     android:id="@+id/phone_button"
-                    android:onClick="phoneButtonListener"/>
+                    android:onClick="phoneButtonListener" android:backgroundTint="#ff35ff1c"/>
+            <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="remove"
+                    android:id="@+id/remove_phone"
+                    android:onClick="removePhoneButtonListener"/>
+            />
         </LinearLayout>
     </LinearLayout>
 

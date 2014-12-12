@@ -11,7 +11,7 @@ public class SoundDetector extends Activity {
     private Accelerometer mAccelerometer = null;
     private TextView tv = null;
     private TextView tv2 = null;
-    protected static final String SERVER = "158.130.106.198";
+    protected static final String SERVER = "158.130.108.19";
     protected static final String PORT = "3000";
     private int count = 0;
 

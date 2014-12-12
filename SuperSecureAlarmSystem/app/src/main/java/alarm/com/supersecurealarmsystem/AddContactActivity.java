@@ -27,6 +27,57 @@ public class AddContactActivity extends Activity {
     }
 
     /**
+     * Checks the email from the email EditView to see if it is a valid
+     * email address.
+     * If it is invalid, makes a descriptive toast and returns.
+     * Else sends the remove request to the server to remove this email number
+     * @param v
+     */
+    public void removeEmailButtonListener(View v) {
+        String responseMessage = "Please Enter a valid email address: foo@bar.com";
+        CharSequence email = emailAddress.getText();
+
+        if (!isValidEmail(email)) {
+            makeToast(responseMessage);
+            return;
+        }
+
+        HttpRequest newRequest = new HttpRequest("remov", email.toString());
+        try {
+            newRequest.sendGet();
+        } catch (Exception e) {
+            Log.v("AddContactActivity", "error occurred");
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Checks the phone number from the phone EditView to see if it is a valid
+     * phone number.
+     * If it is invalid, makes a descriptive toast and returns.
+     * Else sends the phone request to the server to remove this phone number
+     * @param v
+     */
+    public void removePhoneButtonListener(View v) {
+        String responseMessage = "Please Enter a valid phone number: 12312341234";
+        CharSequence number = phoneNumber.getText();
+
+
+        if (!isValidPhone(number)) {
+            makeToast(responseMessage);
+            return;
+        }
+
+        HttpRequest newRequest = new HttpRequest("remop", number.toString());
+        try {
+            newRequest.sendGet();
+        } catch (Exception e) {
+            Log.v("AddContactActivity", "error occurred");
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Checks the phone number from the phone EditView to see if it is a valid
      * phone number.
      * If it is invalid, makes a descriptive toast and returns.
@@ -43,7 +94,13 @@ public class AddContactActivity extends Activity {
             return;
         }
 
-        //Do Something Else
+        HttpRequest newRequest = new HttpRequest("phone", number.toString());
+        try {
+            newRequest.sendGet();
+        } catch (Exception e) {
+            Log.v("AddContactActivity", "error occurred");
+            e.printStackTrace();
+        }
     }
 
     /**
