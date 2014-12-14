@@ -19,22 +19,21 @@ public class HttpRequest {
     }
 
     // HTTP GET request
-    protected void sendGet() throws Exception {
-
+    protected boolean sendGet() throws Exception {
         String url = "http://" + SoundDetector.SERVER + ":" + SoundDetector.PORT + "/" + message;
+        try {
+            URL obj = new URL(url);
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
-        URL obj = new URL(url);
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            // optional default is GET
+            con.setRequestMethod("GET");
 
-        // optional default is GET
-        con.setRequestMethod("GET");
+            //add request header
+            con.setRequestProperty("User-Agent", USER_AGENT);
+            int responseCode = con.getResponseCode();
+            Log.v("HTTPREQUEST", "Sending 'GET' request to URL : " + url);
+            Log.v("HTTPREQUEST", "Response Code : " + responseCode);
 
-        //add request header
-        con.setRequestProperty("User-Agent", USER_AGENT);
-
-        int responseCode = con.getResponseCode();
-        Log.v("HTTPREQUEST", "Sending 'GET' request to URL : " + url);
-        Log.v("HTTPREQUEST", "Response Code : " + responseCode);
 
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(con.getInputStream()));
@@ -48,6 +47,10 @@ public class HttpRequest {
 
         //print result
         System.out.println(response.toString());
+        } catch(Exception e) {
+            return false;
+        }
+        return true;
     }
 
     // HTTP POST request
