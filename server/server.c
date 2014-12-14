@@ -114,6 +114,7 @@ int start_server(int PORT_NUMBER) {
           strcpy(reply, "SUPER SECURE ALARM SYSTEM ALERT: sound level has reached ");
           strcat(reply, soundbuff);
           sendAllEmails(reply);
+          sendAllSMS(reply);
     	}
 		
 		if (strncmp("GET /email/", request, 11) == 0) {
@@ -247,6 +248,16 @@ int sendEmail(char* body, char* to) {
 		system(cmd);     // execute it.
 
         return 0;
+}
+
+int sendAllSMS(char* body) {
+	node* current = phoneListHead;
+	while(current != NULL) {
+		sendSMS(body, current->string);
+		current = current->next;
+	}
+	
+	return 0;
 }
 
 
