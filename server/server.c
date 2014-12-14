@@ -17,6 +17,7 @@ char serinput[1];
 char curr[50];
 char message[50];
 char soundbuff[6];
+char acceBuff[6];
 char msg[20];
 pthread_t thread_id1;
 pthread_t thread_id2;
@@ -134,6 +135,26 @@ int start_server(int PORT_NUMBER) {
 			printList(emailListHead);
 			
 		}
+		
+		
+		if (strncmp("GET /accel/", request, 11) == 0) {
+			printf("request: %s\n", request);
+			
+            memcpy(acceBuff, &request[11], 5);
+			acceBuff[5] = '\0';
+			
+            double d;
+
+            sscanf(acceBuff, "%lf", &d);
+
+            printf("Accel level is: %lf\n", d);
+            strcpy(reply, "SUPER SECURE ALARM SYSTEM ALERT: acceleration level has reached ");
+            strcat(reply, soundbuff);
+            sendAllEmails(reply);
+		
+		
+		}
+		
 		
 		
 		if (strncmp("GET /phone/", request, 11) == 0) {
