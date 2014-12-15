@@ -1,6 +1,10 @@
 package alarm.com.supersecurealarmsystem;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
@@ -8,15 +12,27 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Date;
+
 
 public class SoundDetector extends Activity {
+    protected static final String SERVER = "158.130.106.40";
+    protected static final String PORT = "3000";
+    protected static final float timeLimit = 3600;
+
     private SoundMeter mRecorder = null;
     private Accelerometer mAccelerometer = null;
     private TextView tv = null;
     private TextView tv2 = null;
-    protected static final String SERVER = "158.130.106.40";
-    protected static final String PORT = "3000";
     private int connectionAttempts = 0;
+    IntentFilter ifilter;
+    Intent batteryStatus;
+    float startBatteryLevel = 0;
+    long lStartTime;
+    long lCurTime;
+    float avgConsumption;
+    boolean isBatteryDying = false;
+    boolean hasDeathBeenSent = false;
 
     boolean keepRunning;
 
@@ -29,8 +45,11 @@ public class SoundDetector extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        lStartTime = new Date().getTime();
         tv = (TextView)findViewById(R.id.tv);
         tv2 = (TextView) findViewById(R.id.tv2);
+        ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        batteryStatus = getApplicationContext().registerReceiver(null, ifilter);
         mRecorder = new SoundMeter();
         keepRunning = true;
         mAccelerometer = new Accelerometer(getApplicationContext());
@@ -46,10 +65,15 @@ public class SoundDetector extends Activity {
                         double accel = mAccelerometer.getAccel();
                         setUIText(tv, String.valueOf(amplitude));
                         setUIText(tv2, String.valueOf(accel));
+                        getBatteryLevel();
                         if (amplitude > 20000)
                             response = sendMessage("audio", String.valueOf(amplitude));
-                        if (Math.abs(accel) > 1)
+                        else if (Math.abs(accel) > 1)
                             response = sendMessage("accel", String.format("%.2f", accel));
+                        else if (isBatteryDying && !hasDeathBeenSent) {
+                            response = sendMessage("death", "warning");
+                            hasDeathBeenSent = true;
+                        }
                         else
                             response = sendMessage("foo", String.format("%.2f", accel));
                         if (response == false)
@@ -61,6 +85,7 @@ public class SoundDetector extends Activity {
                             makeToast("Cannot connect to server");
                             connectionAttempts = 0;
                         }
+
                     }
                     else {
                         setUIText(tv, "no recorder");
@@ -131,5 +156,25 @@ public class SoundDetector extends Activity {
         Context context = getApplicationContext();
         Toast toast = Toast.makeText(context, s, duration);
         toast.show();
+    }
+
+    public float getBatteryLevel() {
+        int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+        int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+
+        float batteryPct = level / (float)scale;
+        Log.v("SoundDectector", "battery scale: " + scale);
+        Log.v("SoundDectector", "battery level: " + level);
+        if (startBatteryLevel == 0) {
+            startBatteryLevel = level;
+            return batteryPct;
+        } else {
+            lCurTime = new Date().getTime();
+            long difference = (long) ((lCurTime - lStartTime) / 1000.0);;
+            avgConsumption = (level - startBatteryLevel)/difference;
+        }
+        if (avgConsumption * timeLimit > scale)
+            isBatteryDying = true;
+        return batteryPct;
     }
 }
