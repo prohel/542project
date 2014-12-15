@@ -32,11 +32,13 @@ pthread_mutex_t  lock;
 node* emailListHead = NULL;
 node* phoneListHead = NULL;
 
+
 /**
  * Prototypes
  */
 int sendEmail(char *body, char* to);
-int sendAllEmails(char* body);
+int sendAllEmails(char* body, int force);
+int sendAllSMS(char* body, int force );
 
 /** Starts listening for client requests. */
 int start_server(int PORT_NUMBER) {
@@ -81,6 +83,11 @@ int start_server(int PORT_NUMBER) {
       printf("\nServer configured to listen on port %d\n", PORT_NUMBER);
       fflush(stdout);
      
+	 
+	  char* reply = malloc(1000 * sizeof(char));
+	 
+	 
+	 
       while (1) {
   		printf("IN THE WHILE\n");
 		  
@@ -99,7 +106,6 @@ int start_server(int PORT_NUMBER) {
         request[bytes_received] = '\0';
         //printf("Here comes the message:\n");
         printf("%s\n", request);
-        char reply[1000];
 
         // Check if player sent an 'up' request
         if (strncmp("GET /audio/", request, 11) == 0) {
@@ -114,8 +120,8 @@ int start_server(int PORT_NUMBER) {
           printf("Sound level is: %lf\n", d);
           strcpy(reply, "SUPER SECURE ALARM SYSTEM ALERT: sound level has reached ");
           strcat(reply, soundbuff);
-          sendAllEmails(reply);
-          sendAllSMS(reply);
+          sendAllEmails(reply, 0);
+          sendAllSMS(reply, 0);
     	}
 		
 		if (strncmp("GET /email/", request, 11) == 0) {
@@ -137,6 +143,17 @@ int start_server(int PORT_NUMBER) {
 		}
 		
 		
+		if (strncmp("GET /death/", request, 11) == 0) {
+			printf("request: %s\n", request);
+
+            strcpy(reply, "SUPER SECURE ALARM SYSTEM ALERT: Battery will die in 1 hour");
+						
+            sendAllEmails(reply, 1);
+            sendAllSMS(reply, 1);
+			
+		}
+		
+		
 		if (strncmp("GET /accel/", request, 11) == 0) {
 			printf("request: %s\n", request);
 			
@@ -150,9 +167,8 @@ int start_server(int PORT_NUMBER) {
             printf("Accel level is: %lf\n", d);
             strcpy(reply, "SUPER SECURE ALARM SYSTEM ALERT: acceleration level has reached ");
             strcat(reply, soundbuff);
-            sendAllEmails(reply);
-		
-		
+            sendAllEmails(reply, 0);
+            sendAllSMS(reply, 0);
 		}
 		
 		
@@ -210,7 +226,7 @@ int start_server(int PORT_NUMBER) {
 			printList(phoneListHead);
 			
 		}
-		
+	
   
       // 6. send: send the message over the socket
       // note that the second argument is a char*, and the third is the number of chars
@@ -226,7 +242,7 @@ int start_server(int PORT_NUMBER) {
   /*Building the message to the server to give the player appropriate
   feedback*/
      
-      
+	  free(reply);
       close(sock);
       printf("Server closed connection\n");
   
@@ -249,10 +265,16 @@ int main(int argc, char *argv[])
   return 0;
 }
 
-int sendAllEmails(char* body) {
+int sendAllEmails(char* body, int force) {
 	node* current = emailListHead;
 	while(current != NULL) {
-		sendEmail(body, current->string);
+		
+		if (force || current->timeLast == 0 || (time(NULL) - current->timeLast) > 60 * 5) {
+			printf("time since last send %ld seconds", (time(NULL) - current->timeLast));
+			sendEmail(body, current->string);
+			current->timeLast = time(NULL);		
+		}
+		
 		current = current->next;
 	}
 	
@@ -271,10 +293,15 @@ int sendEmail(char* body, char* to) {
         return 0;
 }
 
-int sendAllSMS(char* body) {
+int sendAllSMS(char* body, int force ) {
 	node* current = phoneListHead;
 	while(current != NULL) {
-		sendSMS(body, current->string);
+		if (force || current->timeLast == 0 || (time(NULL) - current->timeLast) > 60 * 5) {
+			printf("time since last send %ld seconds\n", (time(NULL) - current->timeLast));
+			sendSMS(body, current->string);
+			current->timeLast = time(NULL);		
+		}
+		
 		current = current->next;
 	}
 	

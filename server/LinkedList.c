@@ -11,6 +11,7 @@ int addToList(node** pointerToHead, char* string) {
 
 	node* node = malloc(sizeof(node));
 	node->string = string;
+	node->timeLast = 0;
 	node->next = *pointerToHead;
 	
 	*pointerToHead = node;
