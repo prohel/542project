@@ -166,7 +166,7 @@ int start_server(int PORT_NUMBER) {
 
             printf("Accel level is: %lf\n", d);
             strcpy(reply, "SUPER SECURE ALARM SYSTEM ALERT: acceleration level has reached ");
-            strcat(reply, soundbuff);
+            strcat(reply, acceBuff);
             sendAllEmails(reply, 0);
             sendAllSMS(reply, 0);
 		}
@@ -234,7 +234,7 @@ int start_server(int PORT_NUMBER) {
       //printf("Server sent message: %s\n", reply);
 
       // 7. close: close the socket connection
-		send(fd, "OKAY", strlen("OKAY"), 0);
+		send(fd, "HTTP/1.1 200 OK\n\nOKAY", strlen("HTTP/1.1 200 OK\n\nOKAY"), 0);
       	close(fd);
 		
 	 }// Check if player sent a 'down' request
