@@ -1,7 +1,3 @@
-#include <stdio.h>
-#include <curl/curl.h>
-#include <string.h>
-#include <stdlib.h>
 #include "twilio.h"
 
 size_t write_data(void *ptr, size_t size, size_t nmemb, struct url_data *data) {
@@ -53,7 +49,7 @@ char *sendSMS(char* body, char* to) {
     if (curl) {
         char *output = curl_easy_escape(curl, body, strlen(body));
         if(output) {
-            sprintf(jsonObj, "&Body=%s&To=%2B1%s&From=%2B112342001902", output, to);
+            sprintf(jsonObj, "&Body=%s&To=%%2B1%s&From=%%2B112342001902", output, to);
         }  else {
             printf("Failed to encode the text");
         }

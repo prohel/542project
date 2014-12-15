@@ -1,7 +1,8 @@
-
+#include <time.h>
 
 typedef struct node {
 	char* string;
+	time_t timeLast;
 	struct node* next;
 } node;
 
