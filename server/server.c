@@ -242,7 +242,7 @@ int start_server(int PORT_NUMBER) {
   /*Building the message to the server to give the player appropriate
   feedback*/
      
-      
+	  free(reply);
       close(sock);
       printf("Server closed connection\n");
   
