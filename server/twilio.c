@@ -28,12 +28,17 @@ size_t write_data(void *ptr, size_t size, size_t nmemb, struct url_data *data) {
     return size * nmemb;
 }
 
+/**
+ * Sends an SMS message with the given body 
+ * to the given phone number
+ */
 char *sendSMS(char* body, char* to) {
     CURL *curl;
 
     struct url_data data;
     data.size = 0;
     data.data = malloc(4096); /* reasonable size initial buffer */
+	
     if(NULL == data.data) {
         fprintf(stderr, "Failed to allocate memory.\n");
         return NULL;
@@ -53,7 +58,7 @@ char *sendSMS(char* body, char* to) {
         }  else {
             printf("Failed to encode the text");
         }
-    // set cURL options
+    	// set cURL options
         curl_easy_setopt( curl, CURLOPT_POST, 3 ); // number of fields
         curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
         curl_easy_setopt(curl, CURLOPT_URL, "https://api.twilio.com/2010-04-01/Accounts/ACcf028faf52ac63399b3345c6c29203ff/Messages.json");

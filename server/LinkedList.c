@@ -3,6 +3,11 @@
 #include <string.h>
 #include "LinkedList.h"
 
+/**
+ * Creates a node with the given string, and adds to the list 
+ * of the given head. 
+ * Updates the pointer to the new head of the list.
+ */
 int addToList(node** pointerToHead, char* string) {
 
 	if (string == NULL)
@@ -20,6 +25,9 @@ int addToList(node** pointerToHead, char* string) {
 }
 
 
+/**
+ * Prints the contents of the list specified by the head
+ */
 void printList(node* head) {
 	node* current = head;
 	
@@ -28,6 +36,12 @@ void printList(node* head) {
 	}
 }
 
+/**
+ * Deletes the node containing the given string from 
+ * the list specified by head.
+ * 
+ * returns the new head of the list.
+ */
 node* removeNode(node* head, char* string) {
 	printf("remove: %s\n", string);
 	
@@ -35,13 +49,7 @@ node* removeNode(node* head, char* string) {
 		return NULL;
 	}
 	
-	
-	printf("strlen(head->string): %lu\n", strlen(head->string));
-	printf("strlen(string): %lu\n", strlen(string));
-	
-	printf("passed in: %s, head: %s\n", string, head->string);
-	printf("strcmp() evaluated to %s\n", strcmp(string, head->string) == 0 ? "TRUE" : "FALSE");
-	
+	//Handle case where head is the removed node
 	if (strcmp(string, head->string) == 0) {
 		node* newHead = head->next;
 		free(head->string);
@@ -52,6 +60,7 @@ node* removeNode(node* head, char* string) {
 	node* previous = head;
 	node* current = head->next;
 
+	//Search rest of list
 	while (current != NULL) {
 		
 		if (strcmp(string, current->string) == 0) {
@@ -69,6 +78,10 @@ node* removeNode(node* head, char* string) {
 }
 
 
+/**
+ * Frees all the node and strings contained in the 
+ * specified linked list
+ */ 
 int freeList(node* head) {
 	
 	node* current = head;
@@ -81,6 +94,5 @@ int freeList(node* head) {
 		current = next;
 	}
 	
-	return 0;
-	
+	return 0;	
 }

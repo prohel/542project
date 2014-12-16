@@ -1,5 +1,6 @@
 #include <time.h>
 
+//A node in a linked list
 typedef struct node {
 	char* string;
 	time_t timeLast;
