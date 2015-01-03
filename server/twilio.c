@@ -65,7 +65,7 @@ char *sendSMS(char* body, char* to) {
         curl_easy_setopt(curl, CURLOPT_POSTFIELDS, jsonObj);
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &data);
-        curl_easy_setopt(curl, CURLOPT_USERPWD, "ACcf028faf52ac63399b3345c6c29203ff:e2361f5debf2e1bb7892c32534dd79a2");
+        curl_easy_setopt(curl, CURLOPT_USERPWD, <hidden from public git>);
         res = curl_easy_perform(curl);
         if(res != CURLE_OK) {
                 fprintf(stderr, "curl_easy_perform() failed: %s\n",  
